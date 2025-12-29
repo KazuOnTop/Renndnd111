@@ -90,6 +90,47 @@ EspBtn.MouseButton1Click:Connect(function()
 end)
 
 -- ESP LOGIC
+-- =========================
+-- HIGHLIGHT PLAYER (SURVIVOR / KILLER)
+-- =========================
+local function getRole(plr)
+	if plr.Team and string.find(string.lower(plr.Team.Name), "killer") then
+		return "KILLER"
+	end
+	return "SURVIVOR"
+end
+
+RunService.RenderStepped:Connect(function()
+	for _, plr in pairs(Players:GetPlayers()) do
+		if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+			if ESP then
+				if not plr.Character:FindFirstChild("RennHL") then
+					local hl = Instance.new("Highlight", plr.Character)
+					hl.Name = "RennHL"
+					hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+					hl.FillTransparency = 0.5
+					hl.OutlineTransparency = 0
+				end
+
+				local role = getRole(plr)
+				local hl = plr.Character:FindFirstChild("RennHL")
+				if hl then
+					if role == "KILLER" then
+						hl.FillColor = Color3.fromRGB(255, 60, 60)
+						hl.OutlineColor = Color3.fromRGB(255, 0, 0)
+					else
+						hl.FillColor = Color3.fromRGB(60, 255, 60)
+						hl.OutlineColor = Color3.fromRGB(0, 255, 0)
+					end
+				end
+			else
+				if plr.Character:FindFirstChild("RennHL") then
+					plr.Character.RennHL:Destroy()
+				end
+			end
+		end
+	end
+end)
 RunService.RenderStepped:Connect(function()
 	for _,plr in pairs(Players:GetPlayers()) do
 		if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
