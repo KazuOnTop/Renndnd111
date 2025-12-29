@@ -1,61 +1,45 @@
---// RENN D1 - VIOLENCE DISTRICT | FINAL ALL IN ONE
---// UI Draggable | Open Close | ESP | Killer | Survivor | Visual
+--// RENN D1 - VIOLENCE DISTRICT
+--// MOBILE ONLY (ANDROID FIX)
+--// UI Scroll + Touch Friendly
 --// By RennD1
 
---================ SERVICES ================
+--================ SERVICES =================
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
 
 --================ FLAGS ===================
--- ESP / VISUAL
 local ESP = false
 local Bright = false
 local NoFog = false
 local LowMode = false
 
--- KILLER
-local Hitbox = false
-local FullGenBreak = false
-local InfLunge = false
-local InfSkill = false
-
--- SURVIVOR
-local AutoPerfectGen = false
-local AutoPerfectHeal = false
-local AutoParry = false
-local AutoAim = false
-
 --================ GUI =====================
-local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
-ScreenGui.Name = "RennD1UI"
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "RennD1Mobile"
+ScreenGui.Parent = game.CoreGui
 ScreenGui.ResetOnSpawn = false
 
--- OPEN BUTTON
+-- OPEN BUTTON (MOBILE)
 local Open = Instance.new("TextButton", ScreenGui)
-Open.Size = UDim2.new(0,70,0,32)
-Open.Position = UDim2.new(0,10,0.5,0)
+Open.Size = UDim2.new(0,80,0,40)
+Open.Position = UDim2.new(0,10,0.45,0)
 Open.Text = "RENN"
 Open.Font = Enum.Font.GothamBold
-Open.TextSize = 14
-Open.BackgroundColor3 = Color3.fromRGB(30,30,30)
+Open.TextSize = 16
+Open.BackgroundColor3 = Color3.fromRGB(35,35,35)
 Open.TextColor3 = Color3.new(1,1,1)
-Open.ZIndex = 20
-Open.Active = true
-Open.Draggable = true
-Instance.new("UICorner", Open).CornerRadius = UDim.new(0,8)
+Open.ZIndex = 50
+Instance.new("UICorner", Open).CornerRadius = UDim.new(0,10)
 
--- MAIN
+-- MAIN FRAME (MOBILE SAFE)
 local Main = Instance.new("Frame", ScreenGui)
-Main.Size = UDim2.new(0,460,0,420)
-Main.Position = UDim2.new(0.3,0,0.2,0)
+Main.Size = UDim2.new(0.92,0,0.82,0)
+Main.Position = UDim2.new(0.04,0,0.09,0)
 Main.BackgroundColor3 = Color3.fromRGB(22,22,22)
 Main.BorderSizePixel = 0
 Main.Visible = false
-Main.Active = true
-Main.Draggable = true
 Main.ZIndex = 10
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0,12)
 
@@ -65,17 +49,17 @@ end)
 
 -- HEADER
 local Header = Instance.new("TextLabel", Main)
-Header.Size = UDim2.new(1,0,0,45)
+Header.Size = UDim2.new(1,0,0,42)
 Header.BackgroundColor3 = Color3.fromRGB(32,32,32)
-Header.Text = "🔥 RennD1 | Violence District"
+Header.Text = "🔥 RennD1 | Mobile"
 Header.TextColor3 = Color3.new(1,1,1)
 Header.Font = Enum.Font.GothamBold
-Header.TextSize = 18
+Header.TextSize = 16
 Header.BorderSizePixel = 0
 
 local Close = Instance.new("TextButton", Header)
-Close.Size = UDim2.new(0,40,1,0)
-Close.Position = UDim2.new(1,-40,0,0)
+Close.Size = UDim2.new(0,42,1,0)
+Close.Position = UDim2.new(1,-42,0,0)
 Close.Text = "X"
 Close.BackgroundTransparency = 1
 Close.TextColor3 = Color3.fromRGB(255,80,80)
@@ -85,24 +69,20 @@ Close.MouseButton1Click:Connect(function()
 	Main.Visible = false
 end)
 
---================ UI HELPER ================
-local function Button(text, y)
-	local b = Instance.new("TextButton", Main)
-	b.Size = UDim2.new(0.9,0,0,34)
-	b.Position = UDim2.new(0.05,0,0,y)
-	b.Text = text
-	b.Font = Enum.Font.Gotham
-	b.TextSize = 14
-	b.BackgroundColor3 = Color3.fromRGB(45,45,45)
-	b.TextColor3 = Color3.new(1,1,1)
-	b.BorderSizePixel = 0
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0,8)
-	return b
-end
+-- SCROLLING (WAJIB MOBILE)
+local Scroll = Instance.new("ScrollingFrame", Main)
+Scroll.Size = UDim2.new(1,0,1,-42)
+Scroll.Position = UDim2.new(0,0,0,42)
+Scroll.CanvasSize = UDim2.new(0,0,0,520)
+Scroll.ScrollBarImageTransparency = 0.3
+Scroll.BackgroundTransparency = 1
+Scroll.BorderSizePixel = 0
+Scroll.AutomaticCanvasSize = Enum.AutomaticSize.None
 
+--================ UI HELPERS ==============
 local function Title(text, y, color)
-	local t = Instance.new("TextLabel", Main)
-	t.Size = UDim2.new(1,0,0,24)
+	local t = Instance.new("TextLabel", Scroll)
+	t.Size = UDim2.new(1,0,0,26)
 	t.Position = UDim2.new(0,0,0,y)
 	t.Text = text
 	t.BackgroundTransparency = 1
@@ -112,66 +92,51 @@ local function Title(text, y, color)
 	return t
 end
 
---================ VISUAL ==================
-Title("👁 VISUAL", 55, Color3.fromRGB(200,200,200))
+local function Button(text, y)
+	local b = Instance.new("TextButton", Scroll)
+	b.Size = UDim2.new(0.9,0,0,40)
+	b.Position = UDim2.new(0.05,0,0,y)
+	b.Text = text
+	b.Font = Enum.Font.Gotham
+	b.TextSize = 14
+	b.BackgroundColor3 = Color3.fromRGB(45,45,45)
+	b.TextColor3 = Color3.new(1,1,1)
+	b.BorderSizePixel = 0
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0,10)
+	return b
+end
 
-local EspBtn = Button("ESP [OFF]", 85)
+--================ VISUAL ==================
+Title("👁 VISUAL", 10, Color3.fromRGB(220,220,220))
+
+local EspBtn = Button("ESP [OFF]", 45)
 EspBtn.MouseButton1Click:Connect(function()
 	ESP = not ESP
 	EspBtn.Text = "ESP ["..(ESP and "ON" or "OFF").."]"
 end)
 
-local BrightBtn = Button("Brightness [OFF]", 125)
+local BrightBtn = Button("Brightness [OFF]", 95)
 BrightBtn.MouseButton1Click:Connect(function()
 	Bright = not Bright
 	BrightBtn.Text = "Brightness ["..(Bright and "ON" or "OFF").."]"
 end)
 
-local FogBtn = Button("No Fog [OFF]", 165)
+local FogBtn = Button("No Fog [OFF]", 145)
 FogBtn.MouseButton1Click:Connect(function()
 	NoFog = not NoFog
 	FogBtn.Text = "No Fog ["..(NoFog and "ON" or "OFF").."]"
 end)
 
-local LowBtn = Button("Low Mode [OFF]", 205)
+local LowBtn = Button("Low Mode [OFF]", 195)
 LowBtn.MouseButton1Click:Connect(function()
 	LowMode = not LowMode
 	LowBtn.Text = "Low Mode ["..(LowMode and "ON" or "OFF").."]"
 end)
 
---================ KILLER ==================
-Title("🔴 KILLER", 245, Color3.fromRGB(255,80,80))
-
-local HitboxBtn = Button("Hitbox [OFF]", 275)
-HitboxBtn.MouseButton1Click:Connect(function()
-	Hitbox = not Hitbox
-	HitboxBtn.Text = "Hitbox ["..(Hitbox and "ON" or "OFF").."]"
-end)
-
-local LungeBtn = Button("Infinity Lunge [OFF]", 315)
-LungeBtn.MouseButton1Click:Connect(function()
-	InfLunge = not InfLunge
-	LungeBtn.Text = "Infinity Lunge ["..(InfLunge and "ON" or "OFF").."]"
-end)
-
-local SkillBtn = Button("Infinity Skill [OFF]", 355)
-SkillBtn.MouseButton1Click:Connect(function()
-	InfSkill = not InfSkill
-	SkillBtn.Text = "Infinity Skill ["..(InfSkill and "ON" or "OFF").."]"
-end)
-
---================ SURVIVOR =================
-Title("🟢 SURVIVOR", 395, Color3.fromRGB(80,255,80))
-
--- (Survivor logic berjalan tanpa tombol tambahan biar UI tidak kepanjangan)
--- Aktif otomatis kalau role survivor
-
---================ LOGIC ===================
-
--- VISUAL EFFECT
+--================ VISUAL LOGIC ============
 RunService.RenderStepped:Connect(function()
 	if Bright then
-		Lighting.Brightness = 5
+		Lighting.Brightness = 4
 		Lighting.Ambient = Color3.new(1,1,1)
 	end
 	if NoFog then
@@ -186,30 +151,7 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
--- HITBOX
-RunService.RenderStepped:Connect(function()
-	if Hitbox then
-		for _,p in pairs(Players:GetPlayers()) do
-			if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-				p.Character.HumanoidRootPart.Size = Vector3.new(7,7,7)
-				p.Character.HumanoidRootPart.Transparency = 0.6
-			end
-		end
-	end
-end)
-
--- INFINITY COOLDOWN (GENERIC)
-RunService.RenderStepped:Connect(function()
-	if (InfLunge or InfSkill) and LocalPlayer.Character then
-		for _,v in pairs(LocalPlayer.Character:GetDescendants()) do
-			if v:IsA("NumberValue") and v.Name:lower():find("cool") then
-				v.Value = 0
-			end
-		end
-	end
-end)
-
--- ESP PLAYER + ROLE + DISTANCE
+--================ ESP PLAYER + ROLE =======
 RunService.RenderStepped:Connect(function()
 	for _,plr in pairs(Players:GetPlayers()) do
 		if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
@@ -217,16 +159,15 @@ RunService.RenderStepped:Connect(function()
 				if not plr.Character.Head:FindFirstChild("RennESP") then
 					local bill = Instance.new("BillboardGui", plr.Character.Head)
 					bill.Name = "RennESP"
-					bill.Size = UDim2.new(0,150,0,40)
+					bill.Size = UDim2.new(0,150,0,38)
 					bill.AlwaysOnTop = true
 
 					local txt = Instance.new("TextLabel", bill)
+					txt.Name = "Label"
 					txt.Size = UDim2.new(1,0,1,0)
 					txt.BackgroundTransparency = 1
 					txt.Font = Enum.Font.GothamBold
 					txt.TextSize = 14
-					txt.TextColor3 = Color3.new(1,0,0)
-					txt.Name = "Label"
 				end
 
 				local role = (plr.Team and plr.Team.Name:lower():find("killer")) and "KILLER" or "SURV"
@@ -235,7 +176,8 @@ RunService.RenderStepped:Connect(function()
 				local lbl = plr.Character.Head.RennESP.Label
 				lbl.TextColor3 = color
 
-				if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+				if LocalPlayer.Character
+				and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 				and plr.Character:FindFirstChild("HumanoidRootPart") then
 					local d = (LocalPlayer.Character.HumanoidRootPart.Position -
 						plr.Character.HumanoidRootPart.Position).Magnitude
