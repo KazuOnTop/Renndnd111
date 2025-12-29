@@ -99,6 +99,55 @@ local function getRole(plr)
 	end
 	return "SURVIVOR"
 end
+-- =========================
+-- AUTO GENERATOR ESP PROGRESS (FIX)
+-- =========================
+local function findProgressValue(model)
+	for _, v in pairs(model:GetDescendants()) do
+		if (v:IsA("NumberValue") or v:IsA("IntValue")) then
+			if v.Value >= 0 and v.Value <= 100 then
+				return v
+			end
+		end
+	end
+	return nil
+end
+
+RunService.RenderStepped:Connect(function()
+	for _, model in pairs(workspace:GetDescendants()) do
+		if model:IsA("Model") then
+			local part = model:FindFirstChildWhichIsA("BasePart")
+			local prog = findProgressValue(model)
+
+			if part and prog then
+				if ESP then
+					if not part:FindFirstChild("RennGenESP") then
+						local bill = Instance.new("BillboardGui", part)
+						bill.Name = "RennGenESP"
+						bill.Size = UDim2.new(0,130,0,35)
+						bill.AlwaysOnTop = true
+						bill.StudsOffset = Vector3.new(0,2,0)
+
+						local txt = Instance.new("TextLabel", bill)
+						txt.Name = "Label"
+						txt.Size = UDim2.new(1,0,1,0)
+						txt.BackgroundTransparency = 1
+						txt.Font = Enum.Font.GothamBold
+						txt.TextSize = 14
+						txt.TextColor3 = Color3.fromRGB(255, 255, 0)
+					end
+
+					part.RennGenESP.Label.Text =
+						"GEN "..math.floor(prog.Value).."%"
+				else
+					if part:FindFirstChild("RennGenESP") then
+						part.RennGenESP:Destroy()
+					end
+				end
+			end
+		end
+	end
+end)
 
 RunService.RenderStepped:Connect(function()
 	for _, plr in pairs(Players:GetPlayers()) do
