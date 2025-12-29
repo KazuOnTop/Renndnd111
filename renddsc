@@ -1,4 +1,4 @@
--- Violence District GUI - Full Features (Mobile Compatible) 
+-- renndndhubv1 - Violence District GUI (Mobile Compatible) 
 -- LocalScript - Place in StarterPlayerScripts 
  
 local Players = game:GetService("Players") 
@@ -12,7 +12,7 @@ local PlayerGui = Player:WaitForChild("PlayerGui")
  
 -- Create GUI 
 local ScreenGui = Instance.new("ScreenGui") 
-ScreenGui.Name = "ViolenceDistrict" 
+ScreenGui.Name = "renndndhubv1" 
 ScreenGui.Parent = PlayerGui 
 ScreenGui.ResetOnSpawn = false 
  
@@ -55,7 +55,7 @@ local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Size = UDim2.new(1, -60, 1, 0) 
 TitleLabel.Position = UDim2.new(0, 10, 0, 0) 
 TitleLabel.BackgroundTransparency = 1 
-TitleLabel.Text = "💀 VIOLENCE DISTRICT 💀" 
+TitleLabel.Text = "🔥 renndndhubv1 🔥" 
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) 
 TitleLabel.TextScaled = true 
 TitleLabel.Font = Enum.Font.GothamBold 
@@ -84,7 +84,7 @@ ToggleButton.Name = "ToggleButton"
 ToggleButton.Size = UDim2.new(0, 60, 0, 60) 
 ToggleButton.Position = UDim2.new(0, 20, 0, 20) 
 ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
-ToggleButton.Text = "💀" 
+ToggleButton.Text = "🔥" 
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255) 
 ToggleButton.TextScaled = true 
 ToggleButton.Font = Enum.Font.GothamBold 
@@ -281,158 +281,6 @@ end
 -- Connect NoClip toggle 
 Toggles.NoClip.Button.Activated:Connect(toggleNoClip) 
  
-print("Violence District GUI Loaded! 💀")     Button.Font = Enum.Font.Gotham 
-    Button.BorderSizePixel = 0 
-    Button.LayoutOrder = i 
-    Button.Parent = ScrollFrame 
-     
-    local BtnCorner = Instance.new("UICorner") 
-    BtnCorner.CornerRadius = UDim.new(0, 8) 
-    BtnCorner.Parent = Button 
-     
-    local BtnStroke = Instance.new("UIStroke") 
-    BtnStroke.Color = Color3.fromRGB(60, 60, 60) 
-    BtnStroke.Thickness = 1 
-    BtnStroke.Parent = Button 
-     
-    Toggles[feature] = { 
-        Button = Button, 
-        Enabled = false 
-    } 
-end 
- 
--- Update ScrollFrame CanvasSize 
-local function updateCanvasSize() 
-    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, ListLayout.AbsoluteContentSize.Y + 20) 
-end 
-ListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize) 
- 
--- Variables 
-local isDragging = false 
-local dragStart = nil 
-local startPos = nil 
-local isOpen = false 
- 
--- Feature States 
-local featureStates = { 
-    AutoParry = false, AutoKill = false, ESP = false, NoClip = false, 
-    SpeedHack = false, Teleport = false, KillAura = false, GodMode = false, 
-    InfiniteJump = false, Fly = false 
-} 
- 
--- Toggle GUI 
-local function toggleGUI() 
-    isOpen = not isOpen 
-    local targetPos = isOpen and UDim2.new(0.5, -200, 0.5, -250) or UDim2.new(0.5, -200, -1, 0) 
-     
-    local tween = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}) 
-    tween:Play() 
-     
-    if not isOpen then 
-        tween.Completed:Wait() 
-    end 
-end 
- 
--- Draggable Function 
-local function updateInput(input) 
-    local delta = input.Position - dragStart 
-    local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y) 
-    MainFrame.Position = UDim2.new(math.clamp(position.X.Scale, 0, 1), position.X.Offset, math.clamp(position.Y.Scale, 0, 1), position.Y.Offset) 
-end 
- 
-TitleBar.InputBegan:Connect(function(input) 
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then 
-        isDragging = true 
-        dragStart = input.Position 
-        startPos = MainFrame.Position 
-         
-        input.Changed:Connect(function() 
-            if input.UserInputState == Enum.UserInputState.End then 
-                isDragging = false 
-            end 
-        end) 
-    end 
-end) 
- 
-UserInputService.InputChanged:Connect(function(input) 
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then 
-        if isDragging then 
-            updateInput(input) 
-        end 
-    end 
-end) 
- 
--- Button Connections 
-ToggleButton.Activated:Connect(toggleGUI) 
-CloseButton.Activated:Connect(toggleGUI) 
- 
--- Feature Toggles 
-for feature, data in pairs(Toggles) do 
-    data.Button.Activated:Connect(function() 
-        featureStates[feature] = not featureStates[feature] 
-        data.Enabled = featureStates[feature] 
-         
-        if featureStates[feature] then 
-            data.Button.Text = feature .. ": ON" 
-            data.Button.BackgroundColor3 = Color3.fromRGB(0, 255, 0) 
-        else 
-            data.Button.Text = feature .. ": OFF" 
-            data.Button.BackgroundColor3 = Color3.fromRGB(45, 45, 45) 
-        end 
-         
-        -- Feature Logic Here 
-        if feature == "SpeedHack" and featureStates[feature] then 
-            Player.Character.Humanoid.WalkSpeed = 100 
-        elseif feature == "SpeedHack" and not featureStates[feature] then 
-            Player.Character.Humanoid.WalkSpeed = 16 
-        end 
-         
-        -- Add more feature logic here... 
-    end) 
-end 
- 
--- Auto Parry (Example) 
-spawn(function() 
-    while true do 
-        if featureStates.AutoParry and Player.Character then 
-            -- Auto Parry Logic (Game Specific) 
-            for _, v in pairs(workspace:GetChildren()) do 
-                if v:FindFirstChild("Humanoid") and v ~= Player.Character then 
-                    -- Game specific parry detection 
-                end 
-            end 
-        end 
-        wait(0.1) 
-    end 
-end) 
- 
--- ESP (Example) 
-spawn(function() 
-    while true do 
-        if featureStates.ESP then 
-            for _, player in pairs(Players:GetPlayers()) do 
-                if player ~= Player and player.Character then 
-                    -- Create ESP for player 
-                end 
-            end 
-        end 
-        wait(1) 
-    end 
-end) 
- 
--- NoClip 
-local function toggleNoClip() 
-    if Player.Character then 
-        for _, part in pairs(Player.Character:GetDescendants()) do 
-            if part:IsA("BasePart") then 
-                part.CanCollide = not featureStates.NoClip 
-            end 
-        end 
-    end 
-end 
- 
--- Connect NoClip toggle 
-Toggles.NoClip.Button.Activated:Connect(toggleNoClip) 
- 
-print("Violence District GUI Loaded! 💀") 
+print("renndndhubv1 Loaded! 🔥") 
+
 
